@@ -12,6 +12,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Server {
 
@@ -21,8 +23,15 @@ public class Server {
 
     private SimpleDateFormat simpleDateFormat;
 
+    private ExecutorService executorService;
+
+    public ExecutorService getExecutorService() {
+        return executorService;
+    }
+
     public Server() {
 
+        executorService = Executors.newFixedThreadPool(5000);
         clients = new Vector<>();
         simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
 
@@ -48,6 +57,7 @@ public class Server {
             e.printStackTrace();
         } finally {
             try {
+                executorService.shutdown();
                 server.close();
             } catch (IOException e) {
                 e.printStackTrace();
